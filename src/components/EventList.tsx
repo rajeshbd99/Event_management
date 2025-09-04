@@ -2,67 +2,49 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useEventsStore, EventItem } from "../store/useEventsStore";
+import { useEventsStore } from "../store/useEventsStore";
 import EventCard from "./EventCard";
 
 type SortOption = "upcoming" | "newest" | "oldest";
 
 export default function EventList() {
-  const seededEvents = useEventsStore((s) => s.seededEvents);
-  const setSeededEvents = useEventsStore((s) => s.setSeededEvents);
-  const localEvents = useEventsStore((s) => s.localEvents);
+  const events = useEventsStore((s) => s.events);
+  const fetchEvents = useEventsStore((s) => s.fetchEvents);
 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<SortOption>("upcoming");
 
-  // fetch seeded events
+  // fetch events from API
   useEffect(() => {
     let mounted = true;
-    async function fetchSeeded() {
-      try {
-        setLoading(true);
-        const res = await fetch("/api/events");
-        const data = await res.json();
-        if (!mounted) return;
-        if (data?.events) {
-          setSeededEvents(data.events);
+    async function ensureEvents() {
+      if (!events || events.length === 0) {
+        try {
+          setLoading(true);
+          await fetchEvents();
+        } finally {
+          if (mounted) setLoading(false);
         }
-      } catch (err) {
-        console.error("Failed to fetch seeded events", err);
-      } finally {
-        if (mounted) setLoading(false);
       }
     }
-
-    if (!seededEvents || seededEvents.length === 0) {
-      fetchSeeded();
-    }
-
+    ensureEvents();
     return () => {
       mounted = false;
     };
-  }, [seededEvents, setSeededEvents]);
-
-  // merge local + seeded
-  const merged: EventItem[] = useMemo(() => {
-    const map = new Map<string, EventItem>();
-    for (const ev of localEvents) map.set(ev.id, ev);
-    for (const ev of seededEvents) if (!map.has(ev.id)) map.set(ev.id, ev);
-    return Array.from(map.values());
-  }, [localEvents, seededEvents]);
+  }, [events, fetchEvents]);
 
   // categories
   const categories = useMemo(() => {
     const set = new Set<string>();
-    merged.forEach((e) => set.add(e.category ?? "Other"));
+    events.forEach((e) => set.add(e.category ?? "Other"));
     return Array.from(set);
-  }, [merged]);
+  }, [events]);
 
   // filter + sort
   const filtered = useMemo(() => {
-    let list = merged.slice();
+    let list = events.slice();
 
     if (search.trim()) {
       const q = search.trim().toLowerCase();
@@ -87,12 +69,11 @@ export default function EventList() {
       return da - db;
     });
 
-    // inject RSVP counts if missing
     return list.map((ev) => ({
       ...ev,
-      rsvpCount: ev.rsvpCount ?? Math.floor(Math.random() * 150 + 10),
+      rsvpCount: ev.rsvpCount ?? 0,
     }));
-  }, [merged, search, activeCategory, sort]);
+  }, [events, search, activeCategory, sort]);
 
   return (
     <section>
@@ -109,15 +90,14 @@ export default function EventList() {
 
           {/* Sort */}
           <select
-  value={sort}
-  onChange={(e) => setSort(e.target.value as SortOption)}
-  className="appearance-none rounded-full border border-gray-300 bg-white/90 dark:bg-gray-800/90 px-5 py-2 pr-10 text-sm font-medium text-gray-700 dark:text-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-pink focus:border-brand-pink transition"
->
-  <option value="upcoming">⏳ Upcoming</option>
-  <option value="newest">🆕 Newest</option>
-  <option value="oldest">📜 Oldest</option>
-</select>
-
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortOption)}
+            className="appearance-none rounded-full border border-gray-300 bg-white/90 dark:bg-gray-800/90 px-5 py-2 pr-10 text-sm font-medium text-gray-700 dark:text-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-pink focus:border-brand-pink transition"
+          >
+            <option value="upcoming">⏳ Upcoming</option>
+            <option value="newest">🆕 Newest</option>
+            <option value="oldest">📜 Oldest</option>
+          </select>
         </div>
 
         {/* Categories */}
