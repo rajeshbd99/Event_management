@@ -6,8 +6,8 @@ import { useEventsStore } from "../store/useEventsStore";
 import Modal from "./Modal";
 
 export default function MyEventsList() {
-  const localEvents = useEventsStore((s) => s.localEvents);
-  const deleteLocalEvent = useEventsStore((s) => s.deleteLocalEvent);
+  const events = useEventsStore((s) => s.events);
+  const deleteEvent = useEventsStore((s) => s.deleteEvent);
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,7 +19,7 @@ export default function MyEventsList() {
 
   function onConfirm() {
     if (deletingId) {
-      deleteLocalEvent(deletingId);
+      deleteEvent(deletingId);
     }
     setModalOpen(false);
     setDeletingId(null);
@@ -29,7 +29,7 @@ export default function MyEventsList() {
     <div className="flex flex-col min-h-screen">
       {/* Main content grows */}
       <main className="flex-grow container mx-auto py-12">
-        {localEvents.length === 0 ? (
+        {events.length === 0 ? (
           <div className="text-center text-gray-600 py-24">
             You have no events yet.{" "}
             <Link href="/create" className="font-semibold text-[#db3aa0] hover:underline">
@@ -39,7 +39,7 @@ export default function MyEventsList() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {localEvents.map((ev) => (
+            {events.map((ev) => (
               <div
                 key={ev.id}
                 className="relative bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-950 rounded-3xl p-8 flex flex-col items-center text-center shadow-xl hover:scale-105 transition-transform duration-300"

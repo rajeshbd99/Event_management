@@ -17,8 +17,9 @@ interface Event {
 }
 
 export default function EventDetailsClient({ id }: { id: string }) {
-  const seededEvents = useEventsStore((s) => s.seededEvents);
-  const setSeededEvents = useEventsStore((s) => s.setSeededEvents);
+  const events = useEventsStore((s) => s.events);
+  const fetchEvents = useEventsStore((s) => s.fetchEvents);
+
   const getEventById = useEventsStore((s) => s.getEventById);
   const rsvpEvent = useEventsStore((s) => s.rsvpEvent);
 
@@ -30,15 +31,11 @@ export default function EventDetailsClient({ id }: { id: string }) {
     let mounted = true;
 
     async function ensureSeeded() {
-      if (!seededEvents || seededEvents.length === 0) {
+      if (!events || events.length === 0) {
         try {
-          setLoading(true);
-          const res = await fetch("/api/events");
-          const data = await res.json();
-          if (data?.events) {
-            setSeededEvents(data.events);
-          }
-        } catch { }
+        setLoading(true);
+        await fetchEvents();
+        }
         finally {
           if (mounted) setLoading(false);
         }
@@ -47,12 +44,12 @@ export default function EventDetailsClient({ id }: { id: string }) {
 
     ensureSeeded();
     return () => { mounted = false; };
-  }, [seededEvents, setSeededEvents]);
+  }, [events, fetchEvents]);
 
   useEffect(() => {
     const found = getEventById(id) as Event | null;
     setEvent(found ?? null);
-  }, [seededEvents, id, getEventById]);
+  }, [events, id, getEventById]);
 
   if (loading) {
     return <div className="py-12 text-center text-white">Loading event...</div>;
