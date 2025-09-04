@@ -19,9 +19,7 @@ const display = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "EventSphere — Plan • Create • Celebrate",
-  description:
-    "Create, discover, and manage beautiful events with EventSphere. Built on Next.js + Tailwind.",
+  title: "EventSphere",
 };
 
 export default function RootLayout({
@@ -35,7 +33,9 @@ export default function RootLayout({
             __html: `!function(){try{var t=localStorage.getItem("theme");t&&document.documentElement.setAttribute("data-theme",t)}catch(e){}}();`,
           }}
         />
+        <link rel="icon" href="/favicon.png" />
       </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased font-sans`}
       >
