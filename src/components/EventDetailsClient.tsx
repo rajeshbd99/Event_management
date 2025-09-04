@@ -55,7 +55,7 @@ export default function EventDetailsClient({ id }: { id: string }) {
     return (
       <div className="py-12 text-center">
         <div className="text-xl font-semibold mb-2">Event not found</div>
-        <div className="text-sm text-gray-600 mb-4">The event you're looking for could not be found.</div>
+        <div className="text-sm text-gray-600 mb-4">The event you are looking for could not be found.</div>
         <Link href="/" className="text-[#db3aa0] underline">Back to home</Link>
       </div>
     );

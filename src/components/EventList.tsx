@@ -36,7 +36,7 @@ export default function EventList() {
       }
     }
 
-    // Only fetch if we don't already have seeded events
+    // Only fetch if we dont already have seeded events
     if (!seededEvents || seededEvents.length === 0) {
       fetchSeeded();
     }
