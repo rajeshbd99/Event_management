@@ -8,7 +8,7 @@ const categories = ["Conference", "Workshop", "Meetup", "Other"];
 
 export default function EditEventForm({ id }: { id: string }) {
   const getEventById = useEventsStore((s) => s.getEventById);
-  const updateEvent = useEventsStore((s) => s.updateEvent);
+  const updateLocalEvent = useEventsStore((s) => s.updateLocalEvent);
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ export default function EditEventForm({ id }: { id: string }) {
       return;
     }
 
-    updateEvent(event.id, {
+    updateLocalEvent(event.id, {
       title: title.trim(),
       description: description.trim(),
       date: toISO(date),

@@ -17,7 +17,7 @@ function generateId(): string {
 }
 
 export default function EventForm() {
-  const addEvent = useEventsStore((s) => s.addEvent);
+  const addLocalEvent = useEventsStore((s) => s.addLocalEvent);
   const router = useRouter();
 
   const [title, setTitle] = useState<string>("");
@@ -72,7 +72,7 @@ export default function EventForm() {
       rsvpCount: 0,
     };
 
-    addEvent(newEvent);
+    addLocalEvent(newEvent);
     router.push("/my-events");
   }
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const events = [
+const seededEvents = [
   {
     id: "evt-1",
     title: "Sunrise Design Conference",
@@ -9,7 +9,7 @@ const events = [
     location: "Dhaka International Convention Center",
     category: "Conference",
     createdBy: "seed",
-    rsvpCount: 12,
+    rsvpCount: 12
   },
   {
     id: "evt-2",
@@ -19,7 +19,7 @@ const events = [
     location: "Online (Zoom)",
     category: "Workshop",
     createdBy: "seed",
-    rsvpCount: 5,
+    rsvpCount: 5
   },
   {
     id: "evt-3",
@@ -29,7 +29,7 @@ const events = [
     location: "Cafe Connect, Gulshan",
     category: "Meetup",
     createdBy: "seed",
-    rsvpCount: 8,
+    rsvpCount: 8
   },
   {
     id: "evt-4",
@@ -39,7 +39,7 @@ const events = [
     location: "Riverside Park",
     category: "Other",
     createdBy: "seed",
-    rsvpCount: 3,
+    rsvpCount: 3
   },
   {
     id: "evt-5",
@@ -49,7 +49,7 @@ const events = [
     location: "Tech Hub Auditorium",
     category: "Conference",
     createdBy: "seed",
-    rsvpCount: 21,
+    rsvpCount: 21
   },
   {
     id: "evt-6",
@@ -59,31 +59,10 @@ const events = [
     location: "Innovation Garage",
     category: "Meetup",
     createdBy: "seed",
-    rsvpCount: 7,
-  },
+    rsvpCount: 7
+  }
 ];
 
-// GET all events
 export async function GET() {
-  return NextResponse.json({ events });
-}
-
-// POST new event
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const newEvent = {
-      id: `evt-${Date.now()}`,
-      ...body,
-      rsvpCount: 0, // default
-    };
-
-    events.push(newEvent);
-    return NextResponse.json(newEvent, { status: 201 });
-  } catch {
-    return NextResponse.json(
-      { error: "Invalid request" },
-      { status: 400 }
-    );
-  }
+  return NextResponse.json({ events: seededEvents });
 }
