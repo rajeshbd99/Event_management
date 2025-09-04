@@ -19,17 +19,14 @@ export default function Home() {
               EventSphere
             </span>
             <br />
-            <span className="text-white/95">
-              Create, Celebrate & Connect ✨
+            <span className="text-white/95 text-6xl">
+              Create, Celebrate & Connect
             </span>
           </h1>
 
-          <p className="text-lg md:text-2xl text-white/90 font-light mb-10">
-            Plan, organize, and manage your events with{" "}
-            <span className="font-semibold text-yellow-200">style</span>.  
-            A modern, colorful, and responsive platform powered by{" "}
-            <span className="font-semibold text-green-200">Next.js</span> +{" "}
-            <span className="font-semibold text-blue-200">TailwindCSS</span>.
+          <p className="text-base md:text-lg text-white/90 font-light mb-8 text-center max-w-2xl mx-auto">
+            Explore exciting events, connect with like-minded people, and create memorable experiences.
+            EventSphere helps you organize, discover, and celebrate events effortlessly, all in one place.
           </p>
 
           {/* Call-to-Action Buttons */}
@@ -57,24 +54,24 @@ export default function Home() {
 
       {/* Upcoming Events Section */}
       <section className="py-20 container text-center">
-  {/* Section Header */}
-  <div className="max-w-2xl mx-auto mb-12">
-    <p className="text-sm font-semibold uppercase tracking-wide text-brand-pink mb-2">
-      🚀 Don’t Miss Out
-    </p>
-    <h2 className="text-4xl md:text-5xl font-extrabold font-display bg-gradient-to-r from-brand-pink via-brand-purple to-brand-cyan bg-clip-text mb-4 text-white">
-      Upcoming Events
-    </h2>
-    <p className="text-base md:text-lg text-gray-600 dark:text-gray-300">
-      Discover exciting opportunities, gatherings, and celebrations happening near you.
-    </p>
-  </div>
+        {/* Section Header */}
+        <div className="max-w-2xl mx-auto mb-12">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-pink mb-2">
+            🚀 Don’t Miss Out
+          </p>
+          <h2 className="text-4xl md:text-5xl font-extrabold font-display bg-gradient-to-r from-brand-pink via-brand-purple to-brand-cyan bg-clip-text mb-4 text-white">
+            Upcoming Events
+          </h2>
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300">
+            Discover exciting opportunities, gatherings, and celebrations happening near you.
+          </p>
+        </div>
 
-  {/* Event Cards */}
-  <div>
-    <EventList />
-  </div>
-</section>
+        {/* Event Cards */}
+        <div>
+          <EventList />
+        </div>
+      </section>
 
     </div>
   );

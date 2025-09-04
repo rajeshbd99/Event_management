@@ -5,7 +5,6 @@ import { useEventsStore } from "../store/useEventsStore";
 import { format } from "date-fns";
 import Link from "next/link";
 
-// Define proper Event type
 interface Event {
   id: string;
   title: string;
@@ -39,17 +38,15 @@ export default function EventDetailsClient({ id }: { id: string }) {
           if (data?.events) {
             setSeededEvents(data.events);
           }
-        } catch {
-        } finally {
+        } catch { }
+        finally {
           if (mounted) setLoading(false);
         }
       }
     }
 
     ensureSeeded();
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, [seededEvents, setSeededEvents]);
 
   useEffect(() => {
@@ -58,19 +55,15 @@ export default function EventDetailsClient({ id }: { id: string }) {
   }, [seededEvents, id, getEventById]);
 
   if (loading) {
-    return <div className="py-12 text-center">Loading event...</div>;
+    return <div className="py-12 text-center text-white">Loading event...</div>;
   }
 
   if (!event) {
     return (
-      <div className="py-12 text-center">
-        <div className="text-xl font-semibold mb-2">Event not found</div>
-        <div className="text-sm text-gray-600 mb-4">
-          The event you are looking for could not be found.
-        </div>
-        <Link href="/" className="text-[#db3aa0] underline">
-          Back to home
-        </Link>
+      <div className="flex flex-col min-h-screen items-center justify-center text-center px-4">
+        <h2 className="text-2xl font-bold text-white mb-2">Event not found</h2>
+        <p className="text-gray-300 mb-4">The event you are looking for could not be found.</p>
+        <Link href="/" className="text-[#db3aa0] underline">Back to home</Link>
       </div>
     );
   }
@@ -81,7 +74,6 @@ export default function EventDetailsClient({ id }: { id: string }) {
 
   function handleRsvp() {
     if (!event) return;
-
     rsvpEvent(event.id);
     setJustRsvped(true);
 
@@ -93,42 +85,44 @@ export default function EventDetailsClient({ id }: { id: string }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-12">
-      <div className="kicker">{event.category}</div>
-      <h1 className="text-3xl font-bold mt-2 mb-2">{event.title}</h1>
-      <div className="text-sm text-gray-600 mb-4">
-        {dateLabel} — {event.location}
-      </div>
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16">
+      {/* Decorative blobs */}
+      <div className="absolute -top-32 -left-32 w-72 h-72 bg-pink-500/30 rounded-full filter blur-3xl animate-blob"></div>
+      <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-purple-500/30 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
 
-      <div className="card mb-4">
-        <p className="text-gray-700">{event.description}</p>
-      </div>
+      {/* Event Card */}
+      <div className="relative z-10 w-full max-w-3xl bg-gray-800 rounded-3xl p-8 shadow-2xl text-white">
+        <div className="uppercase text-sm text-[#db3aa0] font-bold mb-2">{event.category}</div>
+        <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
+        <p className="text-sm text-gray-300 mb-6">{dateLabel} — {event.location}</p>
+        <div className="bg-gray-700 p-4 rounded-xl mb-6">{event.description}</div>
 
-      <div className="flex gap-3 items-center">
-        <button
-          onClick={handleRsvp}
-          className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold bg-[#db3aa0] text-white shadow"
-        >
-          {justRsvped ? "Thanks!" : "RSVP"}
-        </button>
-
-        <div className="text-sm text-gray-700">{event.rsvpCount ?? 0} people interested</div>
-
-        <Link
-          href="/my-events"
-          className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold border"
-        >
-          My Events
-        </Link>
-
-        {event.createdBy === "local" && (
-          <Link
-            href={`/events/${event.id}/edit`}
-            className="ml-auto text-sm text-[#db3aa0] underline"
+        <div className="flex flex-wrap gap-4 items-center">
+          <button
+            onClick={handleRsvp}
+            className="px-5 py-2 bg-[#db3aa0] rounded-lg font-semibold hover:bg-pink-600 transition"
           >
-            Edit
+            {justRsvped ? "Thanks!" : "RSVP"}
+          </button>
+
+          <span className="text-gray-300">{event.rsvpCount ?? 0} people interested</span>
+
+          <Link
+            href="/my-events"
+            className="px-5 py-2 border rounded-lg text-gray-200 hover:bg-gray-700 transition"
+          >
+            My Events
           </Link>
-        )}
+
+          {event.createdBy === "local" && (
+            <Link href={`/events/${event.id}/edit`}>
+              <button className="ml-auto px-5 py-2 bg-[#0f7bd6] rounded-lg font-semibold hover:bg-blue-600 transition text-white">
+                Edit
+              </button>
+            </Link>
+          )}
+
+        </div>
       </div>
     </div>
   );

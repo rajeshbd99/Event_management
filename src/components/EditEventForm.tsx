@@ -91,7 +91,6 @@ export default function EditEventForm({ id }: { id: string }) {
         className="relative z-10 bg-gray-800 rounded-3xl p-8 w-full max-w-2xl shadow-2xl space-y-6"
         noValidate
       >
-        <h2 className="text-2xl font-bold text-white text-center mb-4">Edit Event</h2>
         {errors.general && <div className="text-red-500 text-center">{errors.general}</div>}
 
         {/* Title */}
