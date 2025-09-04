@@ -85,89 +85,102 @@ export default function EditEventForm({ id }: { id: string }) {
   if (!event) return <div className="py-12 text-center">Event not found.</div>;
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl space-y-4" noValidate>
-      {errors.general && <div className="text-red-500">{errors.general}</div>}
+    <div className="flex items-center justify-center relative py-10 overflow-hidden">
+      <form
+        onSubmit={handleSubmit}
+        className="relative z-10 bg-gray-800 rounded-3xl p-8 w-full max-w-2xl shadow-2xl space-y-6"
+        noValidate
+      >
+        <h2 className="text-2xl font-bold text-white text-center mb-4">Edit Event</h2>
+        {errors.general && <div className="text-red-500 text-center">{errors.general}</div>}
 
-      {/* Title */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Title</label>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-            errors.title ? "border-red-400" : "border-gray-200"
-          }`}
-        />
-        {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
-      </div>
-
-      {/* Description */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-          className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-            errors.description ? "border-red-400" : "border-gray-200"
-          }`}
-        />
-        {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
-      </div>
-
-      {/* Date & location */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Title */}
         <div>
-          <label className="block text-sm font-medium mb-1">Date & time</label>
+          <label className="block text-sm font-medium text-gray-200 mb-1">Title</label>
           <input
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            type="datetime-local"
-            className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-              errors.date ? "border-red-400" : "border-gray-200"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={`w-full rounded-lg border px-4 py-2 focus:outline-none bg-gray-700 text-white ${
+              errors.title ? "border-red-400" : "border-gray-600"
             }`}
+            placeholder="Event title"
           />
-          {errors.date && <div className="text-red-500 text-sm mt-1">{errors.date}</div>}
+          {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
         </div>
 
+        {/* Description */}
         <div>
-          <label className="block text-sm font-medium mb-1">Location</label>
-          <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-              errors.location ? "border-red-400" : "border-gray-200"
+          <label className="block text-sm font-medium text-gray-200 mb-1">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={4}
+            className={`w-full rounded-lg border px-4 py-2 focus:outline-none bg-gray-700 text-white ${
+              errors.description ? "border-red-400" : "border-gray-600"
             }`}
+            placeholder="Event description"
           />
-          {errors.location && <div className="text-red-500 text-sm mt-1">{errors.location}</div>}
+          {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
         </div>
-      </div>
 
-      {/* Category */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Category</label>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className={`rounded-md border px-3 py-2 ${
-            errors.category ? "border-red-400" : "border-gray-200"
-          }`}
-        >
-          <option value="">-- Select category --</option>
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        {errors.category && <div className="text-red-500 text-sm mt-1">{errors.category}</div>}
-      </div>
+        {/* Date & Location */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-200 mb-1">Date & Time</label>
+            <input
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              type="datetime-local"
+              className={`w-full rounded-lg border px-4 py-2 focus:outline-none bg-gray-700 text-white ${
+                errors.date ? "border-red-400" : "border-gray-600"
+              }`}
+            />
+            {errors.date && <div className="text-red-500 text-sm mt-1">{errors.date}</div>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-200 mb-1">Location</label>
+            <input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className={`w-full rounded-lg border px-4 py-2 focus:outline-none bg-gray-700 text-white ${
+                errors.location ? "border-red-400" : "border-gray-600"
+              }`}
+              placeholder="Event location"
+            />
+            {errors.location && <div className="text-red-500 text-sm mt-1">{errors.location}</div>}
+          </div>
+        </div>
 
-      <div className="flex items-center gap-3">
-        <button type="submit" className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold bg-[#db3aa0] text-white shadow">
-          Save changes
-        </button>
-      </div>
-    </form>
+        {/* Category */}
+        <div>
+          <label className="block text-sm font-medium text-gray-200 mb-1">Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={`w-full rounded-lg border px-4 py-2 bg-gray-700 text-white focus:outline-none ${
+              errors.category ? "border-red-400" : "border-gray-600"
+            }`}
+          >
+            <option value="">-- Select category --</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+          {errors.category && <div className="text-red-500 text-sm mt-1">{errors.category}</div>}
+        </div>
+
+        {/* Submit */}
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="inline-flex items-center px-6 py-2 rounded-xl bg-[#db3aa0] text-white font-semibold shadow-lg hover:bg-[#e85ab8] transition-colors"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

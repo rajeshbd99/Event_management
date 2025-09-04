@@ -56,17 +56,26 @@ export default function Home() {
       </section>
 
       {/* Upcoming Events Section */}
-      <section className="py-20 container">
-        <div className="flex items-center justify-between mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold font-display text-gray-800 dark:text-white">
-            🚀 Upcoming Events
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Discover what’s happening next
-          </p>
-        </div>
-        <EventList />
-      </section>
+      <section className="py-20 container text-center">
+  {/* Section Header */}
+  <div className="max-w-2xl mx-auto mb-12">
+    <p className="text-sm font-semibold uppercase tracking-wide text-brand-pink mb-2">
+      🚀 Don’t Miss Out
+    </p>
+    <h2 className="text-4xl md:text-5xl font-extrabold font-display bg-gradient-to-r from-brand-pink via-brand-purple to-brand-cyan bg-clip-text mb-4 text-white">
+      Upcoming Events
+    </h2>
+    <p className="text-base md:text-lg text-gray-600 dark:text-gray-300">
+      Discover exciting opportunities, gatherings, and celebrations happening near you.
+    </p>
+  </div>
+
+  {/* Event Cards */}
+  <div>
+    <EventList />
+  </div>
+</section>
+
     </div>
   );
 }

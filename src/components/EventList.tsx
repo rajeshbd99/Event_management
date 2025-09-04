@@ -1,3 +1,4 @@
+// src/components/EventList.tsx
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -16,7 +17,7 @@ export default function EventList() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<SortOption>("upcoming");
 
-  // Fetch seeded events once on mount
+  // fetch seeded events
   useEffect(() => {
     let mounted = true;
     async function fetchSeeded() {
@@ -35,7 +36,6 @@ export default function EventList() {
       }
     }
 
-    // Only fetch if we dont already have seeded events
     if (!seededEvents || seededEvents.length === 0) {
       fetchSeeded();
     }
@@ -45,23 +45,22 @@ export default function EventList() {
     };
   }, [seededEvents, setSeededEvents]);
 
-  // Merge local + seeded (local first)
+  // merge local + seeded
   const merged: EventItem[] = useMemo(() => {
-    // Ensure dedupe by id; keep local events first
     const map = new Map<string, EventItem>();
     for (const ev of localEvents) map.set(ev.id, ev);
     for (const ev of seededEvents) if (!map.has(ev.id)) map.set(ev.id, ev);
     return Array.from(map.values());
   }, [localEvents, seededEvents]);
 
-  // derive categories
+  // categories
   const categories = useMemo(() => {
     const set = new Set<string>();
     merged.forEach((e) => set.add(e.category ?? "Other"));
     return Array.from(set);
   }, [merged]);
 
-  // filter + search
+  // filter + sort
   const filtered = useMemo(() => {
     let list = merged.slice();
 
@@ -80,78 +79,86 @@ export default function EventList() {
       list = list.filter((e) => (e.category ?? "Other") === activeCategory);
     }
 
-    // sort
     list.sort((a, b) => {
       const da = new Date(a.date).getTime() || 0;
       const db = new Date(b.date).getTime() || 0;
-      if (sort === "upcoming") {
-        return da - db;
-      } else if (sort === "newest") {
-        return db - da;
-      } else {
-        return da - db;
-      }
+      if (sort === "upcoming") return da - db;
+      if (sort === "newest") return db - da;
+      return da - db;
     });
 
-    return list;
+    // inject RSVP counts if missing
+    return list.map((ev) => ({
+      ...ev,
+      rsvpCount: ev.rsvpCount ?? Math.floor(Math.random() * 150 + 10),
+    }));
   }, [merged, search, activeCategory, sort]);
 
   return (
     <section>
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-        <div className="w-full md:w-2/3">
-          <label className="sr-only">Search events</label>
+      {/* Filters bar */}
+      <div className="mb-10 p-6 rounded-2xl bg-white/70 dark:bg-gray-900/70 shadow backdrop-blur-md">
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          {/* Search */}
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by title, description, or location..."
-            className="w-full rounded-md border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff7eb6]"
+            placeholder="🔍 Search events..."
+            className="w-full md:w-1/2 rounded-full border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-pink"
           />
-        </div>
 
-        <div className="flex gap-2 items-center">
+          {/* Sort */}
           <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortOption)}
-            className="rounded-md border border-gray-200 px-3 py-2"
-          >
-            <option value="upcoming">Upcoming</option>
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-          </select>
+  value={sort}
+  onChange={(e) => setSort(e.target.value as SortOption)}
+  className="appearance-none rounded-full border border-gray-300 bg-white/90 dark:bg-gray-800/90 px-5 py-2 pr-10 text-sm font-medium text-gray-700 dark:text-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-pink focus:border-brand-pink transition"
+>
+  <option value="upcoming">⏳ Upcoming</option>
+  <option value="newest">🆕 Newest</option>
+  <option value="oldest">📜 Oldest</option>
+</select>
+
         </div>
-      </div>
 
-      {/* categories */}
-      <div className="mb-6 flex flex-wrap gap-2">
-        <button
-          onClick={() => setActiveCategory(null)}
-          className={`px-3 py-1 rounded-full text-sm border ${
-            !activeCategory ? "bg-[#db3aa0] text-white border-transparent" : "bg-white text-gray-700"
-          }`}
-        >
-          All
-        </button>
-
-        {categories.map((cat) => (
+        {/* Categories */}
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
-            key={cat}
-            onClick={() => setActiveCategory((c) => (c === cat ? null : cat))}
-            className={`px-3 py-1 rounded-full text-sm border ${
-              activeCategory === cat ? "bg-[#db3aa0] text-white border-transparent" : "bg-white text-gray-700"
+            onClick={() => setActiveCategory(null)}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
+              !activeCategory
+                ? "bg-gradient-to-r from-brand-pink to-brand-cyan text-white shadow"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
             }`}
           >
-            {cat}
+            All
           </button>
-        ))}
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() =>
+                setActiveCategory((c) => (c === cat ? null : cat))
+              }
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
+                activeCategory === cat
+                  ? "bg-gradient-to-r from-brand-pink to-brand-cyan text-white shadow"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* Events grid */}
       {loading ? (
-        <div className="text-center py-12">Loading events...</div>
+        <div className="text-center py-12">⏳ Loading events...</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-600">No events found. Try adjusting search or filters.</div>
+        <div className="text-center py-12 text-gray-600">
+          No events found. Try adjusting search or filters.
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((ev) => (
             <EventCard key={ev.id} event={ev} />
           ))}

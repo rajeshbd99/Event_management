@@ -7,12 +7,18 @@ export const metadata = {
 
 export default function MyEventsPage() {
   return (
-    <div className="container py-12">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-3">My Events</h1>
-        <p className="text-sm text-gray-600 mb-6">Events you created are listed here. You can view or delete them.</p>
+    <div className="min-h-screen relative flex flex-col items-center justify-center bg-gray-900 py-16 overflow-hidden">
+      <div className="relative z-10 w-full max-w-4xl px-6 text-center">
+        <h1 className="text-4xl font-bold text-white mb-3">My Events</h1>
+        <p className="text-gray-300 mb-8 text-sm md:text-base">
+          Events you created are listed here. You can view, edit, or delete them.
+        </p>
+
+        {/* Events list */}
         <MyEventsList />
       </div>
+
+      
     </div>
   );
 }

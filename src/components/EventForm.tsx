@@ -154,11 +154,11 @@ export default function EventForm() {
         {errors.category && <div className="text-red-500 text-sm mt-1">{errors.category}</div>}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold bg-[#db3aa0] text-white shadow disabled:opacity-60"
+          className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold bg-[#db3aa0] text-white shadow disabled:opacity-60 hover:cursor-pointer"
         >
           {submitting ? "Creating..." : "Create Event"}
         </button>
