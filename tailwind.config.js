@@ -1,40 +1,62 @@
-// tailwind.config.cjs
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{ts,tsx,js,jsx}",
-    "./app/**/*.{ts,tsx,js,jsx}",
-    "./src/components/**/*.{ts,tsx,js,jsx}"
+    "./src/app/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "1rem",
+      screens: { "2xl": "1240px" },
+    },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-geist-sans)"],
+        display: ["var(--font-display)", "var(--font-geist-sans)"],
+        mono: ["var(--font-geist-mono)"],
+      },
       colors: {
-        primary: {
-          50: '#fff8fb',
-          100: '#fde8f2',
-          200: '#f8c5e3',
-          300: '#f29ed0',
-          400: '#ed6fb9',
-          500: '#db3aa0',
-          600: '#b82b85',
-          700: '#8a1f63',
-          800: '#5f1543',
-          900: '#3a0c2a'
+        brand: {
+          pink: "#ff4ecd",
+          purple: "#7c3aed",
+          cyan: "#06b6d4",
+          amber: "#f59e0b",
         },
-        accent: {
-          500: '#00d4a5'
-        },
-        muted: {
-          500: '#6b7280'
-        }
       },
       boxShadow: {
-        'card': '0 8px 30px rgba(16,24,40,0.08)',
+        glow: "0 0 0 2px rgba(255,78,205,.12), 0 12px 40px rgba(124,58,237,.22)",
       },
-      backgroundImage: {
-        'hero-gradient': 'linear-gradient(135deg,#ff7eb6 0%,#7afcff 100%)',
-        'card-gradient': 'linear-gradient(90deg,#ffd4a3, #f6a6ff)'
-      }
+      keyframes: {
+        float: {
+          "0%,100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-4px)" },
+        },
+        "gradient-move": {
+          "0%,100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        blob: {
+          "0%,100%": { transform: "translate(0,0) scale(1)" },
+          "33%": { transform: "translate(10px,-8px) scale(1.05)" },
+          "66%": { transform: "translate(-8px,6px) scale(0.98)" },
+        },
+      },
+      animation: {
+        float: "float 6s ease-in-out infinite",
+        "gradient-move": "gradient-move 8s ease infinite",
+        shimmer: "shimmer 2.5s linear infinite",
+        blob: "blob 12s ease-in-out infinite",
+      },
+      borderRadius: {
+        "2xl": "1.25rem",
+      },
     },
   },
   plugins: [],
-}
+};

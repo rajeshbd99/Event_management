@@ -21,10 +21,9 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-pink-500 via-purple-500 to-cyan-400 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-pink-200/40">
-            EventSphere
           </div>
           <span className="hidden sm:flex flex-col leading-tight">
-            <span className="font-bold text-base md:text-lg">Event Manager</span>
+            <span className="font-bold text-base md:text-lg">EventSphere</span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               plan • create • celebrate
             </span>

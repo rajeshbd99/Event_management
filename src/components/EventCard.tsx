@@ -2,44 +2,48 @@
 "use client";
 
 import Link from "next/link";
-import { format } from "date-fns";
 import { EventItem } from "../store/useEventsStore";
-import { motion } from "framer-motion";
+import { Card } from "./ui/Card";
+import { Badge } from "./ui/Badge";
+import { format } from "date-fns";
 
 export default function EventCard({ event }: { event: EventItem }) {
-  const date = event.date ? new Date(event.date) : null;
-  const dateLabel = date ? format(date, "EEE, MMM d • h:mm a") : "TBA";
-
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      whileHover={{ scale: 1.01 }}
-      className="card"
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="kicker">{event.category ?? "Other"}</div>
-          <h3 className="mt-2 text-lg font-semibold">{event.title}</h3>
-          <p className="mt-2 text-sm text-gray-600">{event.description ?? ""}</p>
-        </div>
-
-        <div className="text-right">
-          <div className="text-sm text-gray-500">{dateLabel}</div>
-          <div className="mt-3 text-sm text-gray-700">{event.location ?? "Location"}</div>
-
-          <div className="mt-3 flex items-center justify-end gap-3">
-            <div className="text-sm text-gray-600">{(event.rsvpCount ?? 0)} RSVP</div>
-            <Link
-              href={`/events/${event.id}`}
-              className="text-sm font-medium text-[#db3aa0] hover:underline"
-            >
-              View →
-            </Link>
-          </div>
-        </div>
+    <Card className="p-5 group transition">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <Badge>{event.category || "General"}</Badge>
+        <span className="text-xs text-gray-500 dark:text-gray-400">
+          {event.date
+            ? format(new Date(event.date), "MMM d, yyyy • h:mm a")
+            : "TBA"}
+        </span>
       </div>
-    </motion.article>
+
+      {/* Title */}
+      <h3 className="text-xl font-display font-semibold group-hover:text-brand-pink transition-colors mb-2">
+        {event.title}
+      </h3>
+
+      {/* Description */}
+      {event.description && (
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+          {event.description}
+        </p>
+      )}
+
+      {/* Footer */}
+      <div className="flex items-center justify-between mt-4">
+        <span className="text-sm text-gray-500 dark:text-gray-400">
+          📍 {event.location || "TBA"}
+        </span>
+        <Link
+          href={`/events/${event.id}`}
+          className="text-sm font-medium text-brand-pink hover:underline"
+        >
+          View →
+        </Link>
+      </div>
+    </Card>
   );
 }

@@ -1,35 +1,71 @@
 // src/app/page.tsx
 import React from "react";
 import Link from "next/link";
+import { Button } from "../components/ui/Button";
 import EventList from "../components/EventList";
 
 export default function Home() {
   return (
-    <div className="container py-12">
-      <section className="hero mb-8">
-        <div className="max-w-3xl">
-          <h1 className="text-4xl font-extrabold mb-2">Create, discover, and manage beautiful events.</h1>
-          <p className="text-lg opacity-90 mb-4">
-            A colorful Event Management prototype built with Next.js, Tailwind CSS and modern UX patterns.
-            Create events, view details, and manage your events — responsive and accessible.
+    <div>
+      {/* Hero Banner */}
+      <section className="relative flex flex-col items-center justify-center text-center min-h-[90vh] px-6 bg-gradient-to-br from-brand-pink via-brand-purple to-brand-cyan overflow-hidden">
+        {/* Decorative Blobs */}
+        <div className="absolute -top-32 -left-32 w-80 h-80 bg-pink-400/40 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-400/40 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-4xl">
+          <h1 className="text-5xl md:text-7xl font-extrabold font-display leading-tight mb-6">
+            <span className="bg-gradient-to-r from-yellow-200 via-pink-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-md">
+              EventSphere
+            </span>
+            <br />
+            <span className="text-white/95">
+              Create, Celebrate & Connect ✨
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-2xl text-white/90 font-light mb-10">
+            Plan, organize, and manage your events with{" "}
+            <span className="font-semibold text-yellow-200">style</span>.  
+            A modern, colorful, and responsive platform powered by{" "}
+            <span className="font-semibold text-green-200">Next.js</span> +{" "}
+            <span className="font-semibold text-blue-200">TailwindCSS</span>.
           </p>
-          <div className="flex gap-3">
-            <Link href="/create" className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold bg-white text-[#db3aa0] shadow">
-              Create an Event
+
+          {/* Call-to-Action Buttons */}
+          <div className="flex flex-wrap justify-center gap-6">
+            <Link href="/create">
+              <Button
+                size="lg"
+                className="px-8 py-3 text-base bg-black text-brand-pink font-bold shadow-lg shadow-pink-300/40 hover:shadow-xl hover:scale-105 transition-all"
+              >
+                + Create Event
+              </Button>
             </Link>
-            <Link href="/my-events" className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold bg-white/10 text-white/95">
-              My Events
+            <Link href="/my-events">
+              <Button
+                size="lg"
+                className="px-8 py-3 text-base border-2 border-white/80 text-white font-bold hover:bg-white/10 hover:shadow-lg transition-all"
+                variant="ghost"
+              >
+                🎉 View My Events
+              </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold">Upcoming Events</h2>
-          <p className="text-sm text-gray-500">Search, filter, and explore</p>
+      {/* Upcoming Events Section */}
+      <section className="py-20 container">
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold font-display text-gray-800 dark:text-white">
+            🚀 Upcoming Events
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Discover what’s happening next
+          </p>
         </div>
-
         <EventList />
       </section>
     </div>
