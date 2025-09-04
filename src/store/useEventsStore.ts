@@ -1,7 +1,6 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 export type EventItem = {
   id: string;
@@ -15,66 +14,76 @@ export type EventItem = {
 };
 
 type EventsState = {
-  localEvents: EventItem[]; // events created by the user
-  seededEvents: EventItem[]; // events from API
-  setSeededEvents: (items: EventItem[]) => void;
-  addLocalEvent: (ev: EventItem) => void;
-  updateLocalEvent: (id: string, patch: Partial<EventItem>) => void;
-  deleteLocalEvent: (id: string) => void;
+  events: EventItem[];
+  loading: boolean;
+  fetchEvents: () => Promise<void>;
+  addEvent: (ev: Omit<EventItem, "id" | "rsvpCount">) => Promise<void>;
+  updateEvent: (id: string, patch: Partial<EventItem>) => Promise<void>;
+  deleteEvent: (id: string) => Promise<void>;
   getEventById: (id: string) => EventItem | undefined;
-  rsvpEvent: (id: string) => void;
-  clearAll: () => void;
+  rsvpEvent: (id: string) => Promise<void>;
 };
 
-export const useEventsStore = create<EventsState>()(
-  persist(
-    (set, get) => ({
-      localEvents: [],
-      seededEvents: [],
-      setSeededEvents: (items) => set({ seededEvents: items }),
-      addLocalEvent: (ev) =>
-        set((state) => ({ localEvents: [ev, ...state.localEvents] })),
-      updateLocalEvent: (id, patch) =>
-        set((state) => ({
-          localEvents: state.localEvents.map((e) => (e.id === id ? { ...e, ...patch } : e)),
-        })),
-      deleteLocalEvent: (id) =>
-        set((state) => ({ localEvents: state.localEvents.filter((e) => e.id !== id) })),
-      getEventById: (id) => {
-        const all = [...get().localEvents, ...get().seededEvents];
-        return all.find((e) => e.id === id);
-      },
-      rsvpEvent: (id) => {
-        const localIndex = get().localEvents.findIndex((e) => e.id === id);
-        if (localIndex !== -1) {
-          set((state) => {
-            const updated = [...state.localEvents];
-            updated[localIndex] = {
-              ...updated[localIndex],
-              rsvpCount: (updated[localIndex].rsvpCount ?? 0) + 1,
-            };
-            return { localEvents: updated };
-          });
-          return;
-        }
+export const useEventsStore = create<EventsState>((set, get) => ({
+  events: [],
+  loading: false,
 
-        const seededIndex = get().seededEvents.findIndex((e) => e.id === id);
-        if (seededIndex !== -1) {
-          set((state) => {
-            const updatedSeeded = [...state.seededEvents];
-            updatedSeeded[seededIndex] = {
-              ...updatedSeeded[seededIndex],
-              rsvpCount: (updatedSeeded[seededIndex].rsvpCount ?? 0) + 1,
-            };
-            return { seededEvents: updatedSeeded };
-          });
-        }
-      },
-      clearAll: () => set({ localEvents: [], seededEvents: [] }),
-    }),
-    {
-      name: "evm-storage-v1", // localStorage key
-      partialize: (state) => ({ localEvents: state.localEvents }),
+  // Fetch from API
+  fetchEvents: async () => {
+    set({ loading: true });
+    try {
+      const res = await fetch("/api/events");
+      const data = await res.json();
+      set({ events: data.events });
+    } catch (error) {
+      console.error("Failed to fetch events:", error);
+    } finally {
+      set({ loading: false });
     }
-  )
-);
+  },
+
+  // Add new event
+  addEvent: async (ev) => {
+    try {
+      const res = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ev),
+      });
+      const newEvent = await res.json();
+      set((state) => ({ events: [...state.events, newEvent] }));
+    } catch (error) {
+      console.error("Failed to add event:", error);
+    }
+  },
+
+  // Update event (in-memory only for now)
+  updateEvent: async (id, patch) => {
+    set((state) => ({
+      events: state.events.map((e) =>
+        e.id === id ? { ...e, ...patch } : e
+      ),
+    }));
+  },
+
+  // Delete event (in-memory only for now)
+  deleteEvent: async (id) => {
+    set((state) => ({
+      events: state.events.filter((e) => e.id !== id),
+    }));
+  },
+
+  // Get event by ID
+  getEventById: (id) => {
+    return get().events.find((e) => e.id === id);
+  },
+
+  // RSVP to event (in-memory for now)
+  rsvpEvent: async (id) => {
+    set((state) => ({
+      events: state.events.map((e) =>
+        e.id === id ? { ...e, rsvpCount: (e.rsvpCount ?? 0) + 1 } : e
+      ),
+    }));
+  },
+}));
