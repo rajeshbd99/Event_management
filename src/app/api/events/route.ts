@@ -9,7 +9,8 @@ const seededEvents = [
     date: "2025-09-20T09:30:00.000Z",
     location: "Dhaka International Convention Center",
     category: "Conference",
-    createdBy: "seed"
+    createdBy: "seed",
+    rsvpCount: 12
   },
   {
     id: "evt-2",
@@ -18,7 +19,8 @@ const seededEvents = [
     date: "2025-09-25T13:00:00.000Z",
     location: "Online (Zoom)",
     category: "Workshop",
-    createdBy: "seed"
+    createdBy: "seed",
+    rsvpCount: 5
   },
   {
     id: "evt-3",
@@ -27,7 +29,8 @@ const seededEvents = [
     date: "2025-10-05T16:00:00.000Z",
     location: "Cafe Connect, Gulshan",
     category: "Meetup",
-    createdBy: "seed"
+    createdBy: "seed",
+    rsvpCount: 8
   },
   {
     id: "evt-4",
@@ -36,7 +39,8 @@ const seededEvents = [
     date: "2025-10-12T06:00:00.000Z",
     location: "Riverside Park",
     category: "Other",
-    createdBy: "seed"
+    createdBy: "seed",
+    rsvpCount: 3
   },
   {
     id: "evt-5",
@@ -45,7 +49,8 @@ const seededEvents = [
     date: "2025-11-08T09:00:00.000Z",
     location: "Tech Hub Auditorium",
     category: "Conference",
-    createdBy: "seed"
+    createdBy: "seed",
+    rsvpCount: 21
   },
   {
     id: "evt-6",
@@ -54,11 +59,11 @@ const seededEvents = [
     date: "2025-09-30T18:30:00.000Z",
     location: "Innovation Garage",
     category: "Meetup",
-    createdBy: "seed"
+    createdBy: "seed",
+    rsvpCount: 7
   }
 ];
 
 export async function GET() {
-  // Simple GET handler: return seeded events
   return NextResponse.json({ events: seededEvents });
 }

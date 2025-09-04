@@ -12,6 +12,7 @@ export type EventItem = {
   location?: string;
   category?: "Conference" | "Workshop" | "Meetup" | "Other" | string;
   createdBy?: "local" | "seed";
+  rsvpCount?: number;
 };
 
 type EventsState = {
@@ -19,8 +20,10 @@ type EventsState = {
   seededEvents: EventItem[]; // events from API (not persisted)
   setSeededEvents: (items: EventItem[]) => void;
   addLocalEvent: (ev: EventItem) => void;
+  updateLocalEvent: (id: string, patch: Partial<EventItem>) => void;
   deleteLocalEvent: (id: string) => void;
   getEventById: (id: string) => EventItem | undefined;
+  rsvpEvent: (id: string) => void;
   clearAll: () => void;
 };
 
@@ -30,12 +33,44 @@ export const useEventsStore = create<EventsState>()(
       localEvents: [],
       seededEvents: [],
       setSeededEvents: (items) => set({ seededEvents: items }),
-      addLocalEvent: (ev) => set((state) => ({ localEvents: [ev, ...state.localEvents] })),
+      addLocalEvent: (ev) =>
+        set((state) => ({ localEvents: [ev, ...state.localEvents] })),
+      updateLocalEvent: (id, patch) =>
+        set((state) => ({
+          localEvents: state.localEvents.map((e) => (e.id === id ? { ...e, ...patch } : e)),
+        })),
       deleteLocalEvent: (id) =>
         set((state) => ({ localEvents: state.localEvents.filter((e) => e.id !== id) })),
       getEventById: (id) => {
         const all = [...get().localEvents, ...get().seededEvents];
         return all.find((e) => e.id === id);
+      },
+      rsvpEvent: (id) => {
+        // prefer localEvents (persisted) else update seededEvents in memory
+        const localIndex = get().localEvents.findIndex((e) => e.id === id);
+        if (localIndex !== -1) {
+          set((state) => {
+            const updated = [...state.localEvents];
+            updated[localIndex] = {
+              ...updated[localIndex],
+              rsvpCount: (updated[localIndex].rsvpCount ?? 0) + 1,
+            };
+            return { localEvents: updated };
+          });
+          return;
+        }
+
+        const seededIndex = get().seededEvents.findIndex((e) => e.id === id);
+        if (seededIndex !== -1) {
+          set((state) => {
+            const updatedSeeded = [...state.seededEvents];
+            updatedSeeded[seededIndex] = {
+              ...updatedSeeded[seededIndex],
+              rsvpCount: (updatedSeeded[seededIndex].rsvpCount ?? 0) + 1,
+            };
+            return { seededEvents: updatedSeeded };
+          });
+        }
       },
       clearAll: () => set({ localEvents: [], seededEvents: [] }),
     }),

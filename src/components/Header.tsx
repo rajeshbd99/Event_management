@@ -4,47 +4,89 @@
 import Link from "next/link";
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
 
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/create", label: "Create Event" },
+    { href: "/my-events", label: "My Events" },
+  ];
+
   return (
-    <header className="w-full border-b border-gray-200/60 bg-transparent">
-      <div className="container flex items-center justify-between py-4">
+    <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/70 backdrop-blur-md dark:bg-gray-900/70">
+      <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-4">
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#ff7eb6] to-[#7afcff] flex items-center justify-center text-white font-bold shadow-md">
-            EM
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-pink-500 via-purple-500 to-cyan-400 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-pink-200/40">
+            EventSphere
           </div>
-          <div>
-            <div className="text-lg font-bold">Event Management</div>
-            <div className="text-xs text-gray-500">beautiful events, beautifully managed</div>
-          </div>
+          <span className="hidden sm:flex flex-col leading-tight">
+            <span className="font-bold text-base md:text-lg">Event Manager</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              plan • create • celebrate
+            </span>
+          </span>
         </Link>
 
-        <nav className="hidden md:flex gap-6 items-center">
-          <Link href="/" className="text-sm font-medium hover:text-[#db3aa0]">Home</Link>
-          <Link href="/create" className="text-sm font-medium hover:text-[#db3aa0]">Create Event</Link>
-          <Link href="/my-events" className="text-sm font-medium hover:text-[#db3aa0]">My Events</Link>
-          <a className="ml-2 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold bg-[#db3aa0] text-white shadow-sm hover:opacity-95" href="#">
-            Get Started
-          </a>
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="relative text-sm font-medium text-gray-700 dark:text-gray-200 transition hover:text-pink-500"
+            >
+              {link.label}
+              <span className="absolute left-0 bottom-[-4px] h-[2px] w-0 bg-gradient-to-r from-pink-500 to-cyan-400 transition-all duration-300 group-hover:w-full" />
+            </Link>
+          ))}
+
+          <DarkModeToggle />
+
+          <Link
+            href="/create"
+            className="ml-2 inline-flex items-center rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:opacity-90"
+          >
+            + Add Event
+          </Link>
         </nav>
 
-        {/* mobile */}
+        {/* Mobile Toggle */}
         <div className="md:hidden">
-          <button aria-label="Toggle menu" onClick={() => setOpen(!open)} className="p-2 rounded-md">
+          <button
+            aria-label="Toggle menu"
+            onClick={() => setOpen(!open)}
+            className="p-2 rounded-md hover:bg-gray-200/60 dark:hover:bg-gray-800/60 transition"
+          >
             {open ? <HiX size={22} /> : <HiMenu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* mobile menu content */}
+      {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden border-t border-gray-100 bg-white">
+        <div className="md:hidden border-t border-gray-100 bg-white/90 backdrop-blur-md dark:bg-gray-900/90">
           <div className="flex flex-col container py-4">
-            <Link href="/" onClick={() => setOpen(false)} className="py-2">Home</Link>
-            <Link href="/create" onClick={() => setOpen(false)} className="py-2">Create Event</Link>
-            <Link href="/my-events" onClick={() => setOpen(false)} className="py-2">My Events</Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="py-2 text-sm font-medium text-gray-700 hover:text-pink-500 dark:text-gray-200"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              href="/create"
+              onClick={() => setOpen(false)}
+              className="mt-3 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-md"
+            >
+              + Add Event
+            </Link>
           </div>
         </div>
       )}
