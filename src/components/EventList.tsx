@@ -1,4 +1,3 @@
-// src/components/EventList.tsx
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -86,7 +85,6 @@ export default function EventList() {
       const da = new Date(a.date).getTime() || 0;
       const db = new Date(b.date).getTime() || 0;
       if (sort === "upcoming") {
-        // upcoming: earliest future first (past events at end)
         return da - db;
       } else if (sort === "newest") {
         return db - da;

@@ -1,10 +1,21 @@
-// src/components/EventDetailsClient.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useEventsStore } from "../store/useEventsStore";
 import { format } from "date-fns";
 import Link from "next/link";
+
+// Define proper Event type
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  date?: string;
+  location?: string;
+  rsvpCount?: number;
+  createdBy?: string;
+}
 
 export default function EventDetailsClient({ id }: { id: string }) {
   const seededEvents = useEventsStore((s) => s.seededEvents);
@@ -13,11 +24,12 @@ export default function EventDetailsClient({ id }: { id: string }) {
   const rsvpEvent = useEventsStore((s) => s.rsvpEvent);
 
   const [loading, setLoading] = useState(false);
-  const [event, setEvent] = useState<any | null>(null);
+  const [event, setEvent] = useState<Event | null>(null);
   const [justRsvped, setJustRsvped] = useState(false);
 
   useEffect(() => {
     let mounted = true;
+
     async function ensureSeeded() {
       if (!seededEvents || seededEvents.length === 0) {
         try {
@@ -27,8 +39,7 @@ export default function EventDetailsClient({ id }: { id: string }) {
           if (data?.events) {
             setSeededEvents(data.events);
           }
-        } catch (err) {
-          // ignore
+        } catch {
         } finally {
           if (mounted) setLoading(false);
         }
@@ -39,11 +50,10 @@ export default function EventDetailsClient({ id }: { id: string }) {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [seededEvents, setSeededEvents]);
 
   useEffect(() => {
-    const found = getEventById(id);
+    const found = getEventById(id) as Event | null;
     setEvent(found ?? null);
   }, [seededEvents, id, getEventById]);
 
@@ -55,20 +65,28 @@ export default function EventDetailsClient({ id }: { id: string }) {
     return (
       <div className="py-12 text-center">
         <div className="text-xl font-semibold mb-2">Event not found</div>
-        <div className="text-sm text-gray-600 mb-4">The event you are looking for could not be found.</div>
-        <Link href="/" className="text-[#db3aa0] underline">Back to home</Link>
+        <div className="text-sm text-gray-600 mb-4">
+          The event you are looking for could not be found.
+        </div>
+        <Link href="/" className="text-[#db3aa0] underline">
+          Back to home
+        </Link>
       </div>
     );
   }
 
-  const dateLabel = event.date ? format(new Date(event.date), "EEEE, MMMM d, yyyy '•' h:mm a") : "TBA";
+  const dateLabel = event.date
+    ? format(new Date(event.date), "EEEE, MMMM d, yyyy '•' h:mm a")
+    : "TBA";
 
   function handleRsvp() {
+    if (!event) return;
+
     rsvpEvent(event.id);
     setJustRsvped(true);
-    // refresh event view by re-reading from store (simple strategy: timeout and reset)
+
     setTimeout(() => {
-      const updated = getEventById(event.id);
+      const updated = getEventById(event.id) as Event | null;
       setEvent(updated ?? null);
       setJustRsvped(false);
     }, 150);
@@ -78,7 +96,9 @@ export default function EventDetailsClient({ id }: { id: string }) {
     <div className="max-w-3xl mx-auto py-12">
       <div className="kicker">{event.category}</div>
       <h1 className="text-3xl font-bold mt-2 mb-2">{event.title}</h1>
-      <div className="text-sm text-gray-600 mb-4">{dateLabel} — {event.location}</div>
+      <div className="text-sm text-gray-600 mb-4">
+        {dateLabel} — {event.location}
+      </div>
 
       <div className="card mb-4">
         <p className="text-gray-700">{event.description}</p>
@@ -92,17 +112,20 @@ export default function EventDetailsClient({ id }: { id: string }) {
           {justRsvped ? "Thanks!" : "RSVP"}
         </button>
 
-        <div className="text-sm text-gray-700">
-          {(event.rsvpCount ?? 0)} people interested
-        </div>
+        <div className="text-sm text-gray-700">{event.rsvpCount ?? 0} people interested</div>
 
-        <Link href="/my-events" className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold border">
+        <Link
+          href="/my-events"
+          className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold border"
+        >
           My Events
         </Link>
 
-        {/* If event is local, show edit link */}
         {event.createdBy === "local" && (
-          <Link href={`/events/${event.id}/edit`} className="ml-auto text-sm text-[#db3aa0] underline">
+          <Link
+            href={`/events/${event.id}/edit`}
+            className="ml-auto text-sm text-[#db3aa0] underline"
+          >
             Edit
           </Link>
         )}

@@ -1,4 +1,3 @@
-// src/store/useEventsStore.ts
 "use client";
 
 import { create } from "zustand";
@@ -16,8 +15,8 @@ export type EventItem = {
 };
 
 type EventsState = {
-  localEvents: EventItem[]; // events created by the user (persisted)
-  seededEvents: EventItem[]; // events from API (not persisted)
+  localEvents: EventItem[]; // events created by the user
+  seededEvents: EventItem[]; // events from API
   setSeededEvents: (items: EventItem[]) => void;
   addLocalEvent: (ev: EventItem) => void;
   updateLocalEvent: (id: string, patch: Partial<EventItem>) => void;
@@ -46,7 +45,6 @@ export const useEventsStore = create<EventsState>()(
         return all.find((e) => e.id === id);
       },
       rsvpEvent: (id) => {
-        // prefer localEvents (persisted) else update seededEvents in memory
         const localIndex = get().localEvents.findIndex((e) => e.id === id);
         if (localIndex !== -1) {
           set((state) => {

@@ -1,4 +1,3 @@
-// src/components/EventForm.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -7,14 +6,12 @@ import { useEventsStore, EventItem } from "../store/useEventsStore";
 
 const categories = ["Conference", "Workshop", "Meetup", "Other"];
 
-function generateId() {
+function generateId(): string {
   try {
     if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-      // @ts-ignore
-      return (crypto as any).randomUUID();
+      return crypto.randomUUID();
     }
   } catch {
-    // ignore
   }
   return `local-${Date.now()}`;
 }
@@ -23,13 +20,13 @@ export default function EventForm() {
   const addLocalEvent = useEventsStore((s) => s.addLocalEvent);
   const router = useRouter();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [location, setLocation] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   function validate() {
     const errs: Record<string, string> = {};
@@ -46,14 +43,14 @@ export default function EventForm() {
     return errs;
   }
 
-  function toISO(dateStr: string) {
+  function toISO(dateStr: string): string {
     if (!dateStr) return "";
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return "";
     return d.toISOString();
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
 
@@ -87,9 +84,8 @@ export default function EventForm() {
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-            errors.title ? "border-red-400" : "border-gray-200"
-          }`}
+          className={`w-full rounded-md border px-3 py-2 focus:outline-none ${errors.title ? "border-red-400" : "border-gray-200"
+            }`}
           placeholder="Event title"
         />
         {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
@@ -102,9 +98,8 @@ export default function EventForm() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-            errors.description ? "border-red-400" : "border-gray-200"
-          }`}
+          className={`w-full rounded-md border px-3 py-2 focus:outline-none ${errors.description ? "border-red-400" : "border-gray-200"
+            }`}
           placeholder="Event description"
         />
         {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
@@ -117,11 +112,11 @@ export default function EventForm() {
           <input
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            type="datetime-local"
-            className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-              errors.date ? "border-red-400" : "border-gray-200"
-            }`}
+            type="date"
+            className={`w-full rounded-md border px-3 py-2 focus:outline-none bg-transparent text-white placeholder-white ${errors.date ? "border-red-400" : "border-gray-200"
+              }`}
           />
+
           {errors.date && <div className="text-red-500 text-sm mt-1">{errors.date}</div>}
         </div>
 
@@ -131,9 +126,8 @@ export default function EventForm() {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Event location"
-            className={`w-full rounded-md border px-3 py-2 focus:outline-none ${
-              errors.location ? "border-red-400" : "border-gray-200"
-            }`}
+            className={`w-full rounded-md border px-3 py-2 focus:outline-none ${errors.location ? "border-red-400" : "border-gray-200"
+              }`}
           />
           {errors.location && <div className="text-red-500 text-sm mt-1">{errors.location}</div>}
         </div>
@@ -145,13 +139,14 @@ export default function EventForm() {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className={`rounded-md border px-3 py-2 ${
-            errors.category ? "border-red-400" : "border-gray-200"
-          }`}
+          className={`rounded-md border px-3 py-2 bg-gray-800 text-white placeholder-white ${errors.category ? "border-red-400" : "border-gray-200"
+            }`}
         >
-          <option value="">-- Select category --</option>
+          <option value="" className="bg-gray-800 text-white">
+            -- Select category --
+          </option>
           {categories.map((c) => (
-            <option key={c} value={c}>
+            <option key={c} value={c} className="bg-gray-800 text-white">
               {c}
             </option>
           ))}

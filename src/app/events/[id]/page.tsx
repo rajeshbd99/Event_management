@@ -1,4 +1,3 @@
-// src/app/events/[id]/page.tsx
 import React from "react";
 import EventDetailsClient from "../../../components/EventDetailsClient";
 

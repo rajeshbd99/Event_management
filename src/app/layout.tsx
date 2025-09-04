@@ -30,7 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Prevent theme flash if you toggle data-theme in DarkModeToggle */}
         <script
           dangerouslySetInnerHTML={{
             __html: `!function(){try{var t=localStorage.getItem("theme");t&&document.documentElement.setAttribute("data-theme",t)}catch(e){}}();`,
