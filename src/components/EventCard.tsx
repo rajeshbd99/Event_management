@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { EventItem } from "../store/useEventsStore";
 import { Card } from "./ui/Card";
-import { Badge } from "./ui/Badge";
 import { format } from "date-fns";
 
 export default function EventCard({
