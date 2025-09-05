@@ -2,7 +2,7 @@ import React from "react";
 import MyEventsList from "../../components/MyEventsList";
 
 export const metadata = {
-  title: "My Events - Event Management",
+  title: "My Events - EventSphere",
 };
 
 export default function MyEventsPage() {

@@ -1,37 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventSphere - Event Management Platform
 
-## Getting Started
 
-First, run the development server:
+A modern **event management application** built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **Zustand**.  
+Users can **create, browse, RSVP, edit, and delete events**. All events are stored via API routes, ensuring they are available across browsers and devices.
 
+---
+
+## 🚀 Features
+
+- 📝 Create, edit, and delete events  
+- 📅 Browse upcoming events with category filters and sorting  
+- 🔍 Search by title, description, or location  
+- 🙋 RSVP to events with live interest count  
+- 🎨 Modern UI with Tailwind CSS + animations  
+- ⚡ State management with Zustand  
+- 🌐 Events persist across browsers (via API, not just local storage)  
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** [Next.js 13](https://nextjs.org/) with App Router  
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)  
+- **State Management:** [Zustand](https://github.com/pmndrs/zustand)  
+- **Date Handling:** [date-fns](https://date-fns.org/)  
+- **Deployment:** [Vercel](https://vercel.com/)  
+
+---
+
+## ⚡ Getting Started
+
+### 1️⃣ Clone the repository
 ```bash
+git clone https://github.com/rajeshbd99/Event_management
+cd event-management
+
+2️⃣ Install dependencies
+npm install
+
+3️⃣ Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+App will be running at 👉 http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4️⃣ Build for production
+npm run build
+npm run start
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Event_management

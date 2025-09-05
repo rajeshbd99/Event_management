@@ -41,13 +41,6 @@ export default function Header() {
               <span className="absolute left-0 bottom-[-4px] h-[2px] w-0 bg-gradient-to-r from-pink-500 to-cyan-400 transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
-          
-          <Link
-            href="/create"
-            className="ml-2 inline-flex items-center rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:opacity-90"
-          >
-            + Add Event
-          </Link>
         </nav>
 
         {/* Mobile Toggle */}
